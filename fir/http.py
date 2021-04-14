@@ -1,4 +1,5 @@
 from typing import Union, Any
+from urllib.parse import urlparse, parse_qs
 from json import loads
 
 
@@ -24,11 +25,16 @@ class CaseInsensitiveDict(dict):
 
 class Message:
 
-	def __init__(self, headers: dict = None, body: bytes = None):
+	def __init__(self, headers: dict = None, body: Union[bytes, str] = None):
 		self.headers = CaseInsensitiveDict(headers)
-		if body is None:
-			body = b''
-		self.body = body
+		self.set_body(body)
+
+	def set_body(self, value: Union[bytes, str]):
+		if value is None:
+			value = b''
+		elif isinstance(value, str):
+			value = value.encode()
+		self.body = value
 
 	def get_body(self) -> bytes:
 		return self.body
@@ -38,17 +44,24 @@ class Message:
 
 
 class Request(Message):
-	
+
 	def __init__(
 		self, 
 		method: str,
-		path: str,
+		path: str = None,
 		headers: dict = None,
 		route: dict = None,
 		query: dict = None,
-		body: bytes = None
+		body: bytes = None,
+		uri: str = None
 	):
 		super().__init__(headers, body)
+		if path is None and uri is None:
+			raise ValueError("At least one argument between 'uri' or 'path' is required.")
+		if uri is not None:
+			parsed_url = urlparse(uri)
+			path = parsed_url.path
+			query = {k: ",".join(v) for k, v in parse_qs(parsed_url.query).items()}
 		self.method = method
 		self._path = path
 		self.route_params = CaseInsensitiveDict(route)
