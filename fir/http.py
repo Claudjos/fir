@@ -8,7 +8,11 @@ class CaseInsensitiveDict(dict):
 	def __init__(self, data: dict):
 		if data is None:
 			data = {}
-		super().__init__({k.lower(): v for k, v in data.items()})
+		super().__init__({
+			k.lower(): ",".join(list(map(lambda x: str(x), v)))
+			if isinstance(v, list) else str(v)
+			for k, v in data.items()
+		})
 
 	def __setitem__(self, key, value):
 		super().__setitem__(key.lower(), value)
