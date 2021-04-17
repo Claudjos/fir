@@ -77,7 +77,10 @@ class Request(Message):
 
 	@property
 	def uri(self):
-		return self.path + "?" + self.query
+		q = self.query
+		if q != "":
+			q = "?" + q
+		return self.path + q
 
 	@property
 	def query(self):

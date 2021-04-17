@@ -1,0 +1,73 @@
+- request:
+    method: GET
+    uri: api/test
+  result:
+    method: GET
+    uri: api/test
+
+- request:
+    method: DELETE
+    path: api/test
+  result:
+    method: DELETE
+    uri: api/test
+
+- request:
+    method: PUT
+    path: api/test
+    query:
+      a: 1
+      b:
+        - a
+        - b
+  result:
+    method: PUT
+    uri: api/test?a=1&b=a,b
+    path: api/test
+    query:
+      a: "1"
+      b: a,b
+
+- request:
+    method: POST
+    uri: api/test?a=1&b=a,b
+  result:
+    method: POST
+    uri: api/test?a=1&b=a,b
+    path: api/test
+    query:
+      a: "1"
+      b: a,b
+
+- request:
+    method: POST
+    uri: api/test?a=1&b=a&b=b
+  result:
+    method: POST
+    uri: api/test?a=1&b=a,b
+    path: api/test
+    query:
+      a: "1"
+      b: a,b
+
+- request:
+    method: PATCH
+    uri: api/test
+    headers:
+      x-api-key: key
+      x-forwarded-for: 1.1.1.1
+  result:
+    method: PATCH
+    uri: api/test
+    path: api/test
+    headers:
+      x-api-key: key
+      x-forwarded-for: 1.1.1.1
+      host: ""
+
+- request:
+    method: GET
+    uri: api/test
+    body: Some content
+  result:
+    body: Some content
