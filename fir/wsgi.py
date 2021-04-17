@@ -4,7 +4,16 @@ from . import http
 
 
 def request_to_environ(request: http.Request) -> dict:
+	"""
+	Converts a HTTP request into a WSGI environ dictionary.
 
+	ARGS:
+		- request: a HTTP request.
+
+	RETURNS:
+		A WSGI dictionary.
+
+	"""
 	if request.headers.get("host") is None:
 		request.headers["host"] = ""
 
@@ -30,6 +39,39 @@ def request_to_environ(request: http.Request) -> dict:
 		environ[key] = value
 	
 	return environ
+
+
+def environ_to_request(environ: dict, request_class = None) -> http.Request:
+	"""
+	Converts a WSGI environ dictionary into a HTTP request.
+
+	ARGS:
+		- environ: WSGI environ dictionary;
+		- request_class: the class to instantiate to build a request, default
+			to fir.http.Request.
+
+	RETURNS:
+		A HTTP request.
+
+	"""
+	if request_class is None:
+		request_class = http.Request
+
+	headers = {}
+	for key in environ:
+		if key.startswith("HTTP_"):
+			headers[key.replace("HTTP_", "").replace("_", "-").lower()] = environ[key]
+	try:
+		request_body_size = int(environ.get('CONTENT_LENGTH', 0))
+	except (ValueError):
+		request_body_size = 0
+
+	return request_class(
+		method=environ["REQUEST_METHOD"].upper(),
+		uri=environ["RAW_URI"],
+		headers=headers,
+		body=environ['wsgi.input'].read(request_body_size)
+	)
 
 
 def output_to_response(status: str, headers: list, body: Iterable) -> http.Response:
