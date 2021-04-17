@@ -1,6 +1,7 @@
 from typing import Union, Any
 from urllib.parse import urlparse, parse_qs
 from json import loads
+from . import wsgi
 
 
 STATUS_MESSAGES = {
@@ -101,6 +102,10 @@ class Request(Message):
 	@property
 	def query(self):
 		return "&".join(["{}={}".format(k, v) for k, v in self.query_params.items()])
+
+	@classmethod
+	def from_wsgi_environ(cls, environ: dict):
+		return wsgi.environ_to_request(environ, cls)
 
 
 class Response(Message):

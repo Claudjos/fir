@@ -3,7 +3,7 @@ from io import BytesIO
 from . import http
 
 
-def request_to_environ(request: http.Request, server_name: str = "") -> dict:
+def request_to_environ(request: 'http.Request', server_name: str = "") -> dict:
 	"""
 	Converts a HTTP request into a WSGI environ dictionary.
 
@@ -41,7 +41,7 @@ def request_to_environ(request: http.Request, server_name: str = "") -> dict:
 	return environ
 
 
-def environ_to_request(environ: dict, request_class = None) -> http.Request:
+def environ_to_request(environ: dict, request_class = None) -> 'http.Request':
 	"""
 	Converts a WSGI environ dictionary into a HTTP request.
 
@@ -74,7 +74,7 @@ def environ_to_request(environ: dict, request_class = None) -> http.Request:
 	)
 
 
-def output_to_response(status: str, headers: list, body: Iterable) -> http.Response:
+def output_to_response(status: str, headers: list, body: Iterable) -> 'http.Response':
 	status_code, status_message = status.split(" ", 1)
 	_headers = {k: v for k, v in headers}
 	return http.Response(
@@ -90,7 +90,7 @@ class Client:
 	def __init__(self, wsgi_app: Callable):
 		self.wsgi_app = wsgi_app
 
-	def request(self, req: http.Request) -> http.Response:
+	def request(self, req: 'http.Request') -> 'http.Response':
 		call = WSGICall(self.wsgi_app)
 		call.execute(request_to_environ(req))
 		return output_to_response(call.status, call.headers, call.body)
