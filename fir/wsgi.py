@@ -3,7 +3,7 @@ from io import BytesIO
 from . import http
 
 
-def request_to_environ(request: http.Request) -> dict:
+def request_to_environ(request: http.Request, server_name: str = "") -> dict:
 	"""
 	Converts a HTTP request into a WSGI environ dictionary.
 
@@ -26,7 +26,7 @@ def request_to_environ(request: http.Request) -> dict:
 		"PATH_INFO": request.path,
 		"RAW_URI": request.uri,
 		"QUERY_STRING": request.query,
-		"SERVER_NAME": "Fir",
+		"SERVER_NAME": server_name,
 	}
 
 	if body != b'':
