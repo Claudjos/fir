@@ -3,6 +3,22 @@ from urllib.parse import urlparse, parse_qs
 from json import loads
 
 
+STATUS_MESSAGES = {
+	200: "OK",
+	201: "Created",
+	204: "No Content",
+	301: "Moved Permanently",
+	302: "Found",
+	304: "Not Modified",
+	401: "Unauthorized",
+	403: "Forbidden",
+	404: "Not Found",
+	405: "Method Not Allowed",
+	500: "Internal Server Error",
+	503: "Service Unavailable"
+}
+
+
 class CaseInsensitiveDict(dict):
 
 	def __init__(self, data: dict):
@@ -89,7 +105,15 @@ class Request(Message):
 
 class Response(Message):
 
-	def __init__(self, status_code: int, status_message: str, headers: dict, body: bytes):
+	def __init__(
+		self,
+		status_code: int = 200,
+		status_message: str = None, 
+		headers: dict = None,
+		body: bytes = None
+	):
 		super().__init__(headers, body)
+		if status_message is None:
+			status_message = STATUS_MESSAGES.get(status_code, " ")
 		self.status_code = status_code
 		self.status_message = status_message
