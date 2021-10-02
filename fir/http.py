@@ -22,6 +22,8 @@ STATUS_MESSAGES = {
 
 class CaseInsensitiveDict(dict):
 
+	__slots__ = []
+
 	def __init__(self, data: dict):
 		if data is None:
 			data = {}
@@ -46,6 +48,8 @@ class CaseInsensitiveDict(dict):
 
 class Message:
 
+	__slots__ = ["headers", "body"]
+
 	def __init__(self, headers: dict = None, body: Union[bytes, str] = None):
 		self.headers = CaseInsensitiveDict(headers)
 		self.set_body(body)
@@ -65,6 +69,8 @@ class Message:
 
 
 class Request(Message):
+
+	__slots__ = ["method", "_path", "route_params", "query_params"]
 
 	def __init__(
 		self, 
@@ -109,6 +115,8 @@ class Request(Message):
 
 
 class Response(Message):
+
+	__slots__ = ["status_code", "status_message"]
 
 	def __init__(
 		self,
