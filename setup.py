@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 
 NAME = "pyfir"
-VERSION = "0.0.4"
+VERSION = "0.0.5"
 
 REQUIRES = []
 
