@@ -71,3 +71,4 @@
     body: Some content
   result:
     body: Some content
+    length: 12

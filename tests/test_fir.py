@@ -29,3 +29,5 @@ class FirTestCases(unittest.TestCase):
 			self.assertEqual(result["headers"], parsed_req.headers, "headers mismatch")
 		if "body" in result:
 			self.assertEqual(result["body"], parsed_req.get_body().decode(), "body mismatch")
+		if "length" in result:
+			self.assertEqual(result["length"], len(parsed_req.get_body().decode()), "content-length mismatch")

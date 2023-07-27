@@ -30,7 +30,7 @@ def request_to_environ(request: 'http.Request', server_name: str = "") -> dict:
 	}
 
 	if body != b'':
-		environ["CONTENT_LENGTH"] = len(body)
+		environ["CONTENT_LENGTH"] = str(len(body))
 		if request.headers.get("content-type") is not None:
 			environ["CONTENT_TYPE"] = request.headers.get("content-type", "*/*")
 
