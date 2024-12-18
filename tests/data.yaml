@@ -72,3 +72,10 @@
   result:
     body: Some content
     length: 12
+
+- request:
+    method: GET
+    uri: api/test?abc=
+  result:
+    query:
+      abc: ""
