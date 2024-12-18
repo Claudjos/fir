@@ -88,7 +88,7 @@ class Request(Message):
 		if uri is not None:
 			parsed_url = urlparse(uri)
 			path = parsed_url.path
-			query = {k: ",".join(v) for k, v in parse_qs(parsed_url.query).items()}
+			query = {k: ",".join(v) for k, v in parse_qs(parsed_url.query, keep_blank_values=True).items()}
 		self.method = method
 		self._path = path
 		self.route_params = CaseInsensitiveDict(route)
