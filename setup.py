@@ -8,7 +8,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 
 NAME = "pyfir"
-VERSION = "0.0.7"
+VERSION = "1.0.0"
 
 REQUIRES = []
 
@@ -16,7 +16,7 @@ REQUIRES = []
 setup(
     name=NAME,
     version=VERSION,
-    description="Module to ease WSGI App testing.",
+    description="Module to ease WSGI/ASGI App testing.",
     author="Claudjos",
     author_email="claudjosmail@gmail.com",
     url="https://github.com/Claudjos/fir",

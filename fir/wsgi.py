@@ -4,15 +4,13 @@ from . import http
 
 
 def request_to_environ(request: 'http.Request', server_name: str = "") -> dict:
-	"""
-	Converts a HTTP request into a WSGI environ dictionary.
+	"""Converts a HTTP request into a WSGI environ dictionary.
 
-	ARGS:
-		- request: a HTTP request.
+	Args:
+		request: a HTTP request.
 
-	RETURNS:
+	Returns:
 		A WSGI dictionary.
-
 	"""
 	if request.headers.get("host") is None:
 		request.headers["host"] = ""
@@ -42,17 +40,15 @@ def request_to_environ(request: 'http.Request', server_name: str = "") -> dict:
 
 
 def environ_to_request(environ: dict, request_class = None) -> 'http.Request':
-	"""
-	Converts a WSGI environ dictionary into a HTTP request.
+	"""Converts a WSGI environ dictionary into a HTTP request.
 
-	ARGS:
-		- environ: WSGI environ dictionary;
-		- request_class: the class to instantiate to build a request, default
+	Args:
+		environ: WSGI environ dictionary;
+		request_class: the class to instantiate to build a request, default
 			to fir.http.Request.
 
-	RETURNS:
+	Returns:
 		A HTTP request.
-
 	"""
 	if request_class is None:
 		request_class = http.Request
@@ -85,18 +81,22 @@ def output_to_response(status: str, headers: list, body: Iterable) -> 'http.Resp
 	)
 
 
-class Client:
+class WSGIClient:
 
-	def __init__(self, wsgi_app: Callable):
-		self.wsgi_app = wsgi_app
+	__slots__  = ("_app", )
+
+	def __init__(self, app: Callable):
+		self._app = app
 
 	def request(self, req: 'http.Request') -> 'http.Response':
-		call = WSGICall(self.wsgi_app)
+		call = _WSGICall(self._app)
 		call.execute(request_to_environ(req))
 		return output_to_response(call.status, call.headers, call.body)
 
 
-class WSGICall:
+class _WSGICall:
+
+	__slots__ = ("wsgi_app", "status", "headers", "body")
 
 	def __init__(self, wsgi_app: Callable):
 		self.wsgi_app = wsgi_app
