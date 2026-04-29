@@ -4,15 +4,13 @@ from . import http
 
 
 def request_to_environ(request: 'http.Request', server_name: str = "") -> dict:
-	"""
-	Converts a HTTP request into a WSGI environ dictionary.
+	"""Converts a HTTP request into a WSGI environ dictionary.
 
-	ARGS:
-		- request: a HTTP request.
+	Args:
+		request: a HTTP request.
 
-	RETURNS:
+	Returns:
 		A WSGI dictionary.
-
 	"""
 	if request.headers.get("host") is None:
 		request.headers["host"] = ""
@@ -42,17 +40,15 @@ def request_to_environ(request: 'http.Request', server_name: str = "") -> dict:
 
 
 def environ_to_request(environ: dict, request_class = None) -> 'http.Request':
-	"""
-	Converts a WSGI environ dictionary into a HTTP request.
+	"""Converts a WSGI environ dictionary into a HTTP request.
 
-	ARGS:
-		- environ: WSGI environ dictionary;
-		- request_class: the class to instantiate to build a request, default
+	Args:
+		environ: WSGI environ dictionary;
+		request_class: the class to instantiate to build a request, default
 			to fir.http.Request.
 
-	RETURNS:
+	Returns:
 		A HTTP request.
-
 	"""
 	if request_class is None:
 		request_class = http.Request
