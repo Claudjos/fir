@@ -87,16 +87,20 @@ def output_to_response(status: str, headers: list, body: Iterable) -> 'http.Resp
 
 class Client:
 
-	def __init__(self, wsgi_app: Callable):
-		self.wsgi_app = wsgi_app
+	__slots__  = ("_app", )
+
+	def __init__(self, app: Callable):
+		self._app = app
 
 	def request(self, req: 'http.Request') -> 'http.Response':
-		call = WSGICall(self.wsgi_app)
+		call = _WSGICall(self._app)
 		call.execute(request_to_environ(req))
 		return output_to_response(call.status, call.headers, call.body)
 
 
-class WSGICall:
+class _WSGICall:
+
+	__slots__ = ("wsgi_app", "status", "headers", "body")
 
 	def __init__(self, wsgi_app: Callable):
 		self.wsgi_app = wsgi_app
