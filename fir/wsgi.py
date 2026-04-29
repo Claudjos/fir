@@ -85,7 +85,7 @@ def output_to_response(status: str, headers: list, body: Iterable) -> 'http.Resp
 	)
 
 
-class Client:
+class WSGIClient:
 
 	__slots__  = ("_app", )
 

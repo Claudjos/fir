@@ -1,5 +1,5 @@
 # About
-Provides utilities to convert WSGI environ/output to HTTP Request/Response. The main use case for this package is WSGI APP testing through its WSGI client.
+Provides utilities to convert WSGI environ/output to HTTP Request/Response. The main use case for this package is WSGI APP testing through its WSGI client. It provides a simple ASGI client to allow reuse test code when migrating from WSGI to ASGI.
 
 ## Install
 ```
@@ -11,13 +11,13 @@ pip install pyfir
 #### Basic example
 test_api.py
 ```
-from fir.wsgi import Client
+from fir.wsgi import WSGIClient
 from fir.http import Request
 from <package.module> import app # for example your Flask APP
 
 
 # Create a WSGI Client
-client = Client(app)
+client = WSGIClient(app)
 
 
 def test_api():
@@ -36,13 +36,13 @@ test_api.py
 ```
 import unittest
 from ddt import ddt, file_data
-from fir.wsgi import Client
+from fir.wsgi import WSGIClient
 from fir.http import Request
 from <package.module> import app # for example your Flask APP
 
 
 # Create a WSGI Client
-client = Client(app)
+client = WSGIClient(app)
 
 
 @ddt
